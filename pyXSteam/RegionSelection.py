@@ -4,8 +4,8 @@ Section 3: Region Selection
 """
 import math
 import logging
-import RegionBorders
-from Regions import Region1, Region2, Region3, Region4, Region5
+import pyXSteam.RegionBorders as RegionBorders
+from pyXSteam.Regions import Region1, Region2, Region3, Region4, Region5
 
 logger = logging.getLogger(__name__)
 

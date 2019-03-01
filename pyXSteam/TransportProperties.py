@@ -4,9 +4,9 @@ Section 5: Transport properties
 """
 import math
 import logging
-import RegionSelection
-from Regions import Region1, Region2, Region3, Region4, Region5
-import Constants
+import pyXSteam.RegionSelection as RegionSelection
+from pyXSteam.Regions import Region1, Region2, Region3, Region4, Region5
+import pyXSteam.Constants
 
 logger = logging.getLogger(__name__)
 

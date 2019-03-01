@@ -3,8 +3,8 @@
 Section 2: IAPWS IF 97 Calling functions
 """
 import math
-import RegionBorders
-import Constants
+import pyXSteam.RegionBorders as RegionBorders
+import pyXSteam.Constants as Constants
 
 class Region1():
     """

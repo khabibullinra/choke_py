@@ -1,6 +1,7 @@
 import scipy.optimize as opt
-import upvt.PVt_Correlations as pvt
-from pyxSteam.xSteam import xSteam
+import unittest
+import uPVT.PVT_Correlations as pvt
+from pyXSteam.xSteam import xSteam
 steamTable = xSteam(xSteam.UNIT_SYSTEM_MKS)
 
 
@@ -1694,3 +1695,102 @@ def f_choke_difpressure_ssteam_atm(w_kghr, p1_atm, fg, d2_mm=5):
         print('Ошибка! Слишком большой расход для такого входного давления!')
         f = 0
     return f
+
+class TestPVT(unittest.TestCase):
+    '''
+    def w_choke_gaswater_kghr(self):
+        p1_atm = 100
+        p2_atm = 50
+        x = 0.5
+        gamma_g = 0.55
+        t_C = 50
+        d0_mm = 5
+        d1_mm = 100
+        self.assertAlmostEqual(w_choke_gaswater_kghr(p1_atm, p2_atm, x, gamma_g=0.55, t_C =20, d0_mm=5, d1_mm=100),
+                                50,delta=0.01)
+
+    def p_choke_up_gaswater_atm(self):
+        w_kghr = 50
+        p2_atm = 50
+        x = 0.5
+        gamma_g = 0.55
+        t_C = 50
+        d0_mm = 5
+        d1_mm = 100
+        self.assertAlmostEqual(p_choke_up_gaswater_atm(w_kghr, p2_atm, x, gamma_g, t_C=20, d0_mm=5, d1_mm=100),
+                                    100,delta=0.01)
+
+    def p_choke_down_gaswater_atm(self):
+        w_kghr = 50
+        p1_atm = 100
+        x = 0.5
+        gamma_g = 0.55
+        t_C = 50
+        d0_mm = 5
+        d1_mm = 100
+        self.assertAlmostEqual(p_choke_down_gaswater_atm(w_kghr, p1_atm, x, gamma_g, t_C=20, d0_mm=5, d1_mm=100),
+                                   50,delta=0.01)
+
+    def f_choke_difpressure_gaswater_atm(self):
+        w_kghr = 50
+        p1_atm = 100
+        x = 0.5
+        gamma_g = 0.55
+        t_C = 50
+        d0_mm = 5
+        d1_mm = 100
+        self.assertAlmostEqual(f_choke_difpressure_gaswater_atm(w_kghr, p1_atm, x, gamma_g, t_C=20, d0_mm=5, d1_mm=100),
+                                   50,delta=0.01)
+
+    def w_choke_gasoil_kghr(self):
+        p1_atm = 100
+        p2_atm = 50
+        x = 0.5
+        gamma_g = 0.55
+        gamma_oil = 0.8
+        t_C = 50
+        d0_mm = 5
+        d1_mm = 100
+        self.assertAlmostEqual(w_choke_gasoil_kghr(p1_atm, p2_atm, x, gamma_g=0.55, gamma_oil=0.8, t_C=20, d0_mm=5,
+                                        d1_mm=100, pb_Mpa=20,co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1),50,delta=0.01)
+
+    def p_choke_up_gasoil_atm(self):
+            w_kghr = 50
+            p2_atm = 50
+            x = 0.5
+            gamma_g = 0.55
+            gamma_oil = 0.8
+            t_C = 50
+            d0_mm = 5
+            d1_mm = 100
+            self.assertAlmostEqual(p_choke_up_gasoil_atm(w_kghr, p2_atm, x, gamma_g=0.55, gamma_oil=0.8, t_C=20,
+                                d0_mm=5, d1_mm=100, pb_Mpa=20,co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1),100,delta=0.01)
+
+    def p_choke_up_gasoil_atm(self):
+            w_kghr = 50
+            p1_atm = 50
+            x = 0.5
+            gamma_g = 0.55
+            gamma_oil = 0.8
+            t_C = 50
+            d0_mm = 5
+            d1_mm = 100
+            self.assertAlmostEqual(p_choke_down_gasoil_atm(w_kghr, p1_atm, x, gamma_g=0.55, gamma_oil=0.8, t_C=20,
+                                    d0_mm=5, d1_mm=100,pb_Mpa=20,co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1),100,delta=0.01)
+
+    def f_choke_difpressure_gasoil_atm(self):
+            w_kghr = 50
+            p1_atm = 50
+            x = 0.5
+            gamma_g = 0.55
+            gamma_oil = 0.8
+            t_C = 50
+            d0_mm = 5
+            d1_mm = 100
+            self.assertAlmostEqual(f_choke_difpressure_gasoil_atm(w_kghr, p1_atm, x, gamma_g=0.55, gamma_oil=0.8,
+                            t_C=20, d0_mm=5, d1_mm=100,pb_Mpa=20,co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1),50,delta=0.01)
+'''
+
+
+        if __name__ == '__main__':
+            unittest.main()

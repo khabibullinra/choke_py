@@ -14,7 +14,7 @@ q3 = np.array([])
 for p2_atm in p2_a:
     p1 = choke.w_choke_saturatedsteam_kghr(p1_atm, p2_atm, 1, d0_mm=5, d1_mm=100)
     p2 = choke.q_choke_saturatsteam_kghr(p1_atm, p2_atm, 1, dchoke_mm=5)
-    p3 = choke.W_choke_ssteam_kghr(p1_atm, p2_atm, 1, T_C=20, d2_mm=5)
+    p3 = choke.W_choke_ssteam_kghr(p1_atm, p2_atm, 1, t_C=20, d2_mm=5)
     q1 = np.append(q1, p1)
     q2 = np.append(q2, p2)
     q3 = np.append(q3, p3)
@@ -52,12 +52,12 @@ plt.show()
 
 'Построение графика "Давление на выходе в зависимости от расхода и давления на входе"'
 p1_atm = 20
-w_kghr_a = np.arange(0, 200, 2) # расход, кг/час для которого находится давление на выходе
+w_kghr_a = np.arange(0, 100, 2) # расход, кг/час для которого находится давление на выходе
 q1 = np.array([])
 q2 = np.array([])
 q3 = np.array([])
 for w_kghr in w_kghr_a:
-    p1 = choke.p_choke_down_saturatedsteam_atm(w_kghr, p1_atm, 1, 0.55)
+    p1 = choke.p_choke_down_saturatedsteam_atm(w_kghr, p1_atm, 1)
     p2 = choke.p_choke_down_saturatsteam_atm(w_kghr, p1_atm, 1)
     p3 = choke.p_choke_down_ssteam_atm(w_kghr, p1_atm, 1)
     q1 = np.append(q1, p1)

@@ -300,7 +300,7 @@ def q_choke_gasoil_kghr(p1_atm, p2_atm, xg, gamma_g=0.55, gamma_oil=0.8, t_C =20
     vgl = 1 / pvt.unf_gas_density_kgm3(t_K, p1_atm / 10, gamma_g, z)  # удельный объем газа, м3/кг
     vl = 1 / pvt.unf_density_oil_Standing(p1_atm / 10, pb_Mpa, co_1Mpa, rs_m3m3, bo_m3m3, gamma_g,
                                           gamma_oil)  # удельный объем нефти, м3/кг
-    cl = pvt.cvo_kJkgK  # удельная теплоемкость нефти, кДж/кг/К
+    cl = pvt.Cvo_kJkgK  # удельная теплоемкость нефти, кДж/кг/К
     cvg = pvt.Cvg_kJkgK  # удельная теплоемкость газа при постоянном объеме, кДж/кг/К
     cpg = pvt.Cpg_kJkgK  # удельная теплоемкость газа при постоянном давлении, кДж/кг/К
     k = cpg / cvg # показатель адиабаты
@@ -393,7 +393,7 @@ def q_choke_critgasoil_kghr(p1_atm, xg, gamma_g=0.55, gamma_oil=0.8, t_C =20, dc
     vgl = 1 / pvt.unf_gas_density_kgm3(t_K, p1_atm / 10, gamma_g, z)  # удельный объем газа, м3/кг
     vl = 1 / pvt.unf_density_oil_Standing(p1_atm / 10, pb_Mpa, co_1Mpa, rs_m3m3, bo_m3m3, gamma_g,
                                           gamma_oil)  # удельный объем нефти, м3/кг
-    cl = pvt.cvo_kJkgK  # удельная теплоемкость нефти, кДж/кг/К
+    cl = pvt.Cvo_kJkgK  # удельная теплоемкость нефти, кДж/кг/К
     cvg = pvt.Cvg_kJkgK  # удельная теплоемкость газа при постоянном объеме, кДж/кг/К
     cpg = pvt.Cpg_kJkgK  # удельная теплоемкость газа при постоянном давлении, кДж/кг/К
     k = cpg / cvg # показатель адиабаты
@@ -640,7 +640,7 @@ def W_choke_gaswater_kghr (p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5):
     return wi_kghr
 
 
-def W_choke_gasoil_kghr (p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8, pb_Mpa =20, co_1Mpa =0.002,
+def W_choke_gasoil_kghr(p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8, pb_Mpa =20, co_1Mpa =0.002,
                         rs_m3m3=300, bo_m3m3=1):
     """
     расчет расхода нефтегазовой смеси через штуцер по методике Перкинса
@@ -664,7 +664,7 @@ def W_choke_gasoil_kghr (p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamm
     rog_kgm3 = pvt.unf_gas_density_kgm3(t_K, p1_atm / 10, gamma_g, z)  # плотность газа, кг/м3
     roo_kgm3 = pvt.unf_density_oil_Standing(p1_atm / 10, pb_Mpa, co_1Mpa, rs_m3m3, bo_m3m3, gamma_g,
                                             gamma_oil)  # плотность нефти   кг/м3
-    cvo= 0.24 * 778.169 * pvt.cvo_kJkgK  # удельная теплоемкость нефти, кДж/кг/К
+    cvo = 0.24 * 778.169 * pvt.Cvo_kJkgK  # удельная теплоемкость нефти, кДж/кг/К
     cvg = 0.24 * 778.169 * pvt.Cvg_kJkgK  # удельная теплоемкость газа при постоянном объеме, кДж/кг/К
     cpg = 0.24 * 778.169 * pvt.Cpg_kJkgK  # удельная теплоемкость газа при постоянном давлении, кДж/кг/К
     d1_mm = 100  # диаметр трубы до штуцера мм
@@ -810,7 +810,7 @@ def W_choke_crit_gasoil_kghr(p1_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oi
     rog_kgm3 = pvt.unf_gas_density_kgm3(t_K, p1_atm / 10, gamma_g, z)  # плотность газа, кг/м3
     roo_kgm3 = pvt.unf_density_oil_Standing(p1_atm / 10, pb_Mpa, co_1Mpa, rs_m3m3, bo_m3m3, gamma_g,
                                             gamma_oil)  # плотность нефти   кг/м3
-    cvo = 0.24 * 778.169 * pvt.cvo_kJkgK  # удельная теплоемкость нефти, кДж/кг/К
+    cvo = 0.24 * 778.169 * pvt.Cvo_kJkgK  # удельная теплоемкость нефти, кДж/кг/К
     cvg = 0.24 * 778.169 * pvt.Cvg_kJkgK  # удельная теплоемкость газа при постоянном объеме, кДж/кг/К
     cpg = 0.24 * 778.169 * pvt.Cpg_kJkgK  # удельная теплоемкость газа при постоянном давлении, кДж/кг/К
     d1_mm = 100  # диаметр трубы до штуцера мм
@@ -862,7 +862,7 @@ def p_choke_up_gwater_atm(w_kghr, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5):
     """
 
     def w2(p1_atm):
-        return w_choke_gaswater_kghr(p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5) - w_kghr
+        return W_choke_gaswater_kghr(p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5) - w_kghr
 
     return opt.fsolve(w2, p2_atm)
 
@@ -887,7 +887,7 @@ def p_choke_up_goil_atm(w_kghr, p2_atm, fg, gamma_g=0.55, gamma_oil=0.8, t_C=20,
     """
 
     def w2(p1_atm):
-        return w_choke_gasoil_kghr(p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8, pb_Mpa=20,
+        return W_choke_gasoil_kghr(p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8, pb_Mpa=20,
                                    co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1) - w_kghr
 
     return opt.fsolve(w2, p2_atm)
@@ -905,7 +905,7 @@ def p_choke_down_gwater_atm(w_kghr, p1_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5):
     """
 
     def w2(p2_atm):
-        return w_choke_gaswater_kghr (p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5) - w_kghr
+        return W_choke_gaswater_kghr (p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5) - w_kghr
 
     p2 = opt.fsolve(w2, p1_atm - 0.00001)
     if w_kghr > W_choke_crit_gaswater_kghr(p1_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5):
@@ -932,7 +932,7 @@ def p_choke_down_goil_atm(w_kghr, p1_atm, fg, gamma_g=0.55, gamma_oil=0.8, t_C=2
     """
 
     def w2(p2_atm):
-        return w_choke_gasoil_kghr(p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8, pb_Mpa=20,
+        return W_choke_gasoil_kghr(p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8, pb_Mpa=20,
                                    co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1) - w_kghr
 
     p2 = opt.fsolve(w2, p1_atm - 0.00001)
@@ -955,7 +955,7 @@ def f_choke_difpressure_gwater_atm(w_kghr, p1_atm, fg, gamma_g=0.55, t_C=20, d2_
     """
 
     def w2(f):
-        return w_choke_gaswater_kghr(p1_atm, p1_atm - f, fg, gamma_g=0.55, t_C=20, d2_mm=5) - w_kghr
+        return W_choke_gaswater_kghr(p1_atm, p1_atm - f, fg, gamma_g=0.55, t_C=20, d2_mm=5) - w_kghr
 
     f = opt.fsolve(w2, 0)
     if w_kghr > W_choke_crit_gaswater_kghr(p1_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5):
@@ -982,7 +982,7 @@ def f_choke_difpressure_goil_atm(w_kghr, p1_atm, fg, gamma_g=0.55, gamma_oil=0.8
     """
 
     def w2(f):
-        return w_choke_gasoil_kghr(p1_atm, p1_atm - f, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8, pb_Mpa=20,
+        return W_choke_gasoil_kghr(p1_atm, p1_atm - f, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8, pb_Mpa=20,
                                    co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1) - w_kghr
 
     f = opt.fsolve(w2, 0)

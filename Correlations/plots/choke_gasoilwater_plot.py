@@ -8,7 +8,7 @@ import Correlations.choke as choke
 
 
 p1_atm = 20
-p2_a = np.arange(0, p1_atm, 0.05)
+p2_a = np.arange(0.1, p1_atm, 0.05)
 q3 = np.array([])
 for p2_atm in p2_a:
     p3 = choke.W_choke_gasoilwater_kghr(p1_atm, p2_atm, 1, 0, 0)

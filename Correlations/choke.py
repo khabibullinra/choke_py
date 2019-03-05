@@ -1,5 +1,6 @@
 import scipy.optimize as opt
 import uPVT.PVT_correlations as pvt
+import uPVT.PVT as PVT
 from pyXSteam.XSteam import XSteam
 steamTable = XSteam(XSteam.UNIT_SYSTEM_MKS)
 
@@ -1019,6 +1020,14 @@ def W_choke_gasoilwater_kghr(p1_atm, p2_atm, fg, fo, fw, gamma_g=0.55, t_C=20, d
     m_m = 16  # молекулярный вес, моль газа
     z = 0.999  # коэффициент сжимаемости газа
     t_K = t_C + 273
+
+    fl=PVT.FluidBlackOil()
+    fl.gamma_gas = gamma_g
+    fl.gamma_oil = gamma_oil
+    fl.calc(p1_atm,t_C)
+    fl.z
+
+
     rog_kgm3 = pvt.unf_gas_density_kgm3(t_K, p1_atm / 10, gamma_g, z)  # плотность газа, кг/м3
     row_kgm3 = steamTable.rhoL_p(p1_atm)  # плотность воды   кг/м3
     cvw = 0.24 * 778.169 * steamTable.CvL_p(

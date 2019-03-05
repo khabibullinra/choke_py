@@ -6,26 +6,30 @@ import matplotlib.pyplot as plt
 import Correlations.choke as choke
 
 
-p1_atm = 20
-p2_a = np.arange(0.1, p1_atm, 0.05)
-q1 = np.array([])
-q2 = np.array([])
-q3 = np.array([])
-for p2_atm in p2_a:
-    p1 = choke.w_choke_gasoil_kghr(p1_atm, p2_atm, 1, d0_mm=5, d1_mm=100)
-    p2 = choke.q_choke_gasoil_kghr(p1_atm, p2_atm, 1, dchoke_mm=5)
-    p3 = choke.W_choke_gasoil_kghr(p1_atm, p2_atm, 1, t_C=20, d2_mm=5)
-    q1 = np.append(q1, p1)
-    q2 = np.append(q2, p2)
-    q3 = np.append(q3, p3)
-plt.plot(p2_a, q3, label='Перкинс')
-plt.plot(p2_a, q2, label='Альсафран')
-plt.plot(p2_a, q1, label='Чиен (Миллер)')
-plt.title('Расчет расхода нефтегазовой смеси от давления на выходе разными методиками')
-plt.ylabel('Расход смеси, кг/час')
-plt.xlabel('Давление на выходе, атм')
-plt.legend()
-plt.show()
+def plot1():
+    p1_atm = 20
+    p2_a = np.arange(0.1, p1_atm, 0.05)
+    q1 = np.array([])
+    q2 = np.array([])
+    q3 = np.array([])
+    for p2_atm in p2_a:
+        p1 = choke.w_choke_gasoil_kghr(p1_atm, p2_atm, 1, d0_mm=5, d1_mm=100)
+        p2 = choke.q_choke_gasoil_kghr(p1_atm, p2_atm, 1, dchoke_mm=5)
+        p3 = choke.W_choke_gasoil_kghr(p1_atm, p2_atm, 1, t_C=20, d2_mm=5)
+        q1 = np.append(q1, p1)
+        q2 = np.append(q2, p2)
+        q3 = np.append(q3, p3)
+    plt.plot(p2_a, q3, label='Перкинс')
+    plt.plot(p2_a, q2, label='Альсафран')
+    plt.plot(p2_a, q1, label='Чиен (Миллер)')
+    plt.title('Расчет расхода нефтегазовой смеси от давления на выходе разными методиками')
+    plt.ylabel('Расход смеси, кг/час')
+    plt.xlabel('Давление на выходе, атм')
+    plt.legend()
+    return plt
+
+
+plot1().show()
 
 'Построение графика "Давление на входе в зависимости от расхода и давления на выходе"'
 p2_atm = 10

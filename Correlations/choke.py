@@ -30,7 +30,7 @@ def w_choke_gaswater_kghr(p1_atm, p2_atm, x, gamma_g=0.55, t_C =20, d0_mm=5, d1_
     f_atm = p1_atm - p2_atm
     f_kpa = f_atm * 100
     w_kgsec = 3.512407 * 10 ** (-5) * c0 * y1 * d0_mm ** 2 * (f_kpa * ro_kgm3) ** 0.5 / (1 - beta ** 4) ** 0.5
-    w_kghr= w_kgsec * 3600
+    w_kghr = w_kgsec * 3600
     return w_kghr
 
 
@@ -49,7 +49,7 @@ def p_choke_up_gaswater_atm(w_kghr, p2_atm, x, gamma_g, t_C =20, d0_mm =5, d1_mm
     """
 
     def w2(p1_atm):
-        return w_choke_gaswater_kghr(p1_atm, p2_atm, x, gamma_g) - w_kghr
+        return w_choke_gaswater_kghr(p1_atm, p2_atm, x, gamma_g, t_C, d0_mm, d1_mm) - w_kghr
 
     return opt.fsolve(w2, p2_atm)
 
@@ -97,7 +97,7 @@ def f_choke_difpressure_gaswater_atm(w_kghr, p1_atm, x, gamma_g, t_C =20, d0_mm=
     """
 
     def w2(f):
-        return w_choke_gaswater_kghr(p1_atm, p1_atm - f, x, gamma_g, t_C = 20, d0_mm=5, d1_mm=100) - w_kghr
+        return w_choke_gaswater_kghr(p1_atm, p1_atm - f, x, gamma_g, t_C, d0_mm, d1_mm) - w_kghr
 
     return opt.fsolve(w2, 0)
 
@@ -161,7 +161,8 @@ def p_choke_up_gasoil_atm (w_kghr, p2_atm, x, gamma_g=0.55, gamma_oil=0.8, t_C=2
     """
 
     def w2(p1_atm):
-        return w_choke_gasoil_kghr(p1_atm, p2_atm, x) - w_kghr
+        return w_choke_gasoil_kghr(p1_atm, p2_atm, x, gamma_g, gamma_oil, t_C, d0_mm, d1_mm, pb_Mpa,
+                         co_1Mpa, rs_m3m3, bo_m3m3) - w_kghr
 
     return opt.fsolve(w2, p2_atm)
 
@@ -223,7 +224,8 @@ def f_choke_difpressure_gasoil_atm(w_kghr, p1_atm, x, gamma_g=0.55, gamma_oil=0.
     """
 
     def w2(f):
-        return w_choke_gasoil_kghr(p1_atm, p1_atm - f, x, t_C=20, d0_mm=5, d1_mm=100) - w_kghr
+        return w_choke_gasoil_kghr(p1_atm, p1_atm - f, x, gamma_g, gamma_oil, t_C, d0_mm, d1_mm, pb_Mpa,
+                         co_1Mpa, rs_m3m3, bo_m3m3) - w_kghr
 
     return opt.fsolve(w2, 0)
 
@@ -428,7 +430,7 @@ def p_choke_up_gw_atm(w_kghr, p2_atm, xg, gamma_g=0.55, t_C =20, dchoke_mm=5):
     """
 
     def w2(p1_atm):
-        return q_choke_gaswater_kghr(p1_atm, p2_atm, xg, gamma_g=0.55, t_C=20, dchoke_mm=5) - w_kghr
+        return q_choke_gaswater_kghr(p1_atm, p2_atm, xg, gamma_g, t_C, dchoke_mm) - w_kghr
 
     return opt.fsolve(w2, p2_atm)
 
@@ -451,8 +453,8 @@ def p_choke_up_go_atm(w_kghr, p2_atm, xg, gamma_g=0.55, gamma_oil=0.8, t_C=20, d
     """
 
     def w2(p1_atm):
-        return q_choke_gasoil_kghr(p1_atm, p2_atm, xg, gamma_g=0.55, gamma_oil=0.8, t_C=20, dchoke_mm=5, pb_Mpa=20,
-                                   co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1) - w_kghr
+        return q_choke_gasoil_kghr(p1_atm, p2_atm, xg, gamma_g, gamma_oil, t_C, dchoke_mm, pb_Mpa,
+                                   co_1Mpa, rs_m3m3, bo_m3m3) - w_kghr
 
     return opt.fsolve(w2, p2_atm)
 
@@ -469,10 +471,10 @@ def p_choke_down_gw_atm(w_kghr, p1_atm, xg, gamma_g=0.55, t_C=20, dchoke_mm=5):
     """
 
     def w2(p2_atm):
-        return q_choke_gaswater_kghr(p1_atm, p2_atm, xg, gamma_g=0.55, t_C=20, dchoke_mm=5) - w_kghr
+        return q_choke_gaswater_kghr(p1_atm, p2_atm, xg, gamma_g, t_C, dchoke_mm) - w_kghr
 
     p2 = opt.fsolve(w2, p1_atm - 0.00001)
-    if w_kghr > q_choke_critgaswater_kghr(p1_atm, xg, dchoke_mm=5, gamma_g=0.55, t_C=20):
+    if w_kghr > q_choke_critgaswater_kghr(p1_atm, xg, dchoke_mm, gamma_g, t_C):
         print('Ошибка! Слишком большой расход для такого входного давления!')
         p2 = 0
     return p2
@@ -496,12 +498,12 @@ def p_choke_down_go_atm(w_kghr, p1_atm, xg, gamma_g=0.55, gamma_oil=0.8, t_C=20,
     """
 
     def w2(p2_atm):
-        return q_choke_gasoil_kghr(p1_atm, p2_atm, xg, gamma_g=0.55, gamma_oil=0.8, t_C=20, dchoke_mm=5, pb_Mpa=20,
-                                   co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1) - w_kghr
+        return q_choke_gasoil_kghr(p1_atm, p2_atm, xg, gamma_g, gamma_oil, t_C, dchoke_mm, pb_Mpa,
+                                   co_1Mpa, rs_m3m3, bo_m3m3) - w_kghr
 
     p2 = opt.fsolve(w2, p1_atm - 0.00001)
-    if w_kghr > q_choke_critgasoil_kghr(p1_atm, xg, gamma_g=0.55, gamma_oil=0.8, t_C=20, dchoke_mm=5, pb_Mpa=20,
-                                        co_1Mpa =0.002, rs_m3m3=300, bo_m3m3=1):
+    if w_kghr > q_choke_critgasoil_kghr(p1_atm, xg, gamma_g, gamma_oil, t_C, dchoke_mm, pb_Mpa,
+                                        co_1Mpa, rs_m3m3, bo_m3m3):
         print('Ошибка! Слишком большой расход для такого входного давления!')
         p2 = 0
     return p2
@@ -519,10 +521,10 @@ def f_choke_difpressure_gw_atm(w_kghr, p1_atm, xg, gamma_g=0.55, t_C=20, dchoke_
     """
 
     def w2(f):
-        return q_choke_gaswater_kghr(p1_atm, p1_atm - f, xg, gamma_g=0.55, t_C=20, dchoke_mm=5) - w_kghr
+        return q_choke_gaswater_kghr(p1_atm, p1_atm - f, xg, gamma_g, t_C, dchoke_mm) - w_kghr
 
     f = opt.fsolve(w2, 0)
-    if w_kghr > q_choke_critgaswater_kghr(p1_atm, xg, dchoke_mm=5, gamma_g=0.55, t_C=20):
+    if w_kghr > q_choke_critgaswater_kghr(p1_atm, xg, dchoke_mm, gamma_g, t_C):
         print('Ошибка! Слишком большой расход для такого входного давления!')
         f = 0
     return f
@@ -546,12 +548,12 @@ def f_choke_difpressure_go_atm(w_kghr, p1_atm, xg, gamma_g=0.55, gamma_oil=0.8, 
     """
 
     def w2(f):
-        return q_choke_gasoil_kghr(p1_atm, p1_atm - f, xg, gamma_g=0.55, gamma_oil=0.8, t_C=20, dchoke_mm=5, pb_Mpa=20,
-                                   co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1) - w_kghr
+        return q_choke_gasoil_kghr(p1_atm, p1_atm - f, xg, gamma_g, gamma_oil, t_C, dchoke_mm, pb_Mpa,
+                                   co_1Mpa, rs_m3m3, bo_m3m3) - w_kghr
 
     f = opt.fsolve(w2, 0)
-    if w_kghr > q_choke_critgasoil_kghr(p1_atm, xg, gamma_g=0.55, gamma_oil=0.8, t_C=20, dchoke_mm=5, pb_Mpa=20,
-                                        co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1):
+    if w_kghr > q_choke_critgasoil_kghr(p1_atm, xg, gamma_g, gamma_oil, t_C, dchoke_mm, pb_Mpa,
+                                        co_1Mpa, rs_m3m3, bo_m3m3):
         print('Ошибка! Слишком большой расход для такого входного давления!')
         f = 0
     return f
@@ -862,7 +864,7 @@ def p_choke_up_gwater_atm(w_kghr, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5):
     """
 
     def w2(p1_atm):
-        return W_choke_gaswater_kghr(p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5) - w_kghr
+        return W_choke_gaswater_kghr(p1_atm, p2_atm, fg, gamma_g, t_C, d2_mm) - w_kghr
 
     return opt.fsolve(w2, p2_atm)
 
@@ -887,8 +889,8 @@ def p_choke_up_goil_atm(w_kghr, p2_atm, fg, gamma_g=0.55, gamma_oil=0.8, t_C=20,
     """
 
     def w2(p1_atm):
-        return W_choke_gasoil_kghr(p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8, pb_Mpa=20,
-                                   co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1) - w_kghr
+        return W_choke_gasoil_kghr(p1_atm, p2_atm, fg, gamma_g, t_C, d2_mm, gamma_oil, pb_Mpa,
+                                   co_1Mpa, rs_m3m3, bo_m3m3) - w_kghr
 
     return opt.fsolve(w2, p2_atm)
 
@@ -905,10 +907,10 @@ def p_choke_down_gwater_atm(w_kghr, p1_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5):
     """
 
     def w2(p2_atm):
-        return W_choke_gaswater_kghr (p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5) - w_kghr
+        return W_choke_gaswater_kghr (p1_atm, p2_atm, fg, gamma_g, t_C, d2_mm) - w_kghr
 
     p2 = opt.fsolve(w2, p1_atm - 0.00001)
-    if w_kghr > W_choke_crit_gaswater_kghr(p1_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5):
+    if w_kghr > W_choke_crit_gaswater_kghr(p1_atm, fg, gamma_g, t_C, d2_mm):
         print('Ошибка! Слишком большой расход для такого входного давления!')
         p2 = 0
     return p2
@@ -932,12 +934,12 @@ def p_choke_down_goil_atm(w_kghr, p1_atm, fg, gamma_g=0.55, gamma_oil=0.8, t_C=2
     """
 
     def w2(p2_atm):
-        return W_choke_gasoil_kghr(p1_atm, p2_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8, pb_Mpa=20,
-                                   co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1) - w_kghr
+        return W_choke_gasoil_kghr(p1_atm, p2_atm, fg, gamma_g, t_C, d2_mm, gamma_oil, pb_Mpa,
+                                   co_1Mpa, rs_m3m3, bo_m3m3) - w_kghr
 
     p2 = opt.fsolve(w2, p1_atm - 0.00001)
-    if w_kghr > W_choke_crit_gasoil_kghr(p1_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8, pb_Mpa=20,
-                                        co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1):
+    if w_kghr > W_choke_crit_gasoil_kghr(p1_atm, fg, gamma_g, t_C, d2_mm, gamma_oil, pb_Mpa,
+                                        co_1Mpa, rs_m3m3, bo_m3m3):
         print('Ошибка! Слишком большой расход для такого входного давления!')
         p2 = 0
     return p2
@@ -955,10 +957,10 @@ def f_choke_difpressure_gwater_atm(w_kghr, p1_atm, fg, gamma_g=0.55, t_C=20, d2_
     """
 
     def w2(f):
-        return W_choke_gaswater_kghr(p1_atm, p1_atm - f, fg, gamma_g=0.55, t_C=20, d2_mm=5) - w_kghr
+        return W_choke_gaswater_kghr(p1_atm, p1_atm - f, fg, gamma_g, t_C, d2_mm) - w_kghr
 
     f = opt.fsolve(w2, 0)
-    if w_kghr > W_choke_crit_gaswater_kghr(p1_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5):
+    if w_kghr > W_choke_crit_gaswater_kghr(p1_atm, fg, gamma_g, t_C, d2_mm):
         print('Ошибка! Слишком большой расход для такого входного давления!')
         f = 0
     return f
@@ -982,12 +984,12 @@ def f_choke_difpressure_goil_atm(w_kghr, p1_atm, fg, gamma_g=0.55, gamma_oil=0.8
     """
 
     def w2(f):
-        return W_choke_gasoil_kghr(p1_atm, p1_atm - f, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8, pb_Mpa=20,
-                                   co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1) - w_kghr
+        return W_choke_gasoil_kghr(p1_atm, p1_atm - f, fg, gamma_g, t_C, d2_mm, gamma_oil, pb_Mpa,
+                                   co_1Mpa, rs_m3m3, bo_m3m3) - w_kghr
 
     f = opt.fsolve(w2, 0)
-    if w_kghr > W_choke_crit_gasoil_kghr(p1_atm, fg, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8, pb_Mpa=20,
-                                        co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1):
+    if w_kghr > W_choke_crit_gasoil_kghr(p1_atm, fg, gamma_g, t_C, d2_mm, gamma_oil, pb_Mpa,
+                                        co_1Mpa, rs_m3m3, bo_m3m3):
         print('Ошибка! Слишком большой расход для такого входного давления!')
         f = 0
     return f
@@ -1206,8 +1208,8 @@ def p_choke_up_gasoilwater_atm(w_kghr, p2_atm, fg, fo, fw, gamma_g=0.55, gamma_o
     """
 
     def w2(p1_atm):
-        return W_choke_gasoilwater_kghr(p1_atm, p2_atm, fg, fo, fw, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8,
-                                        pb_Mpa=20, co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1) - w_kghr
+        return W_choke_gasoilwater_kghr(p1_atm, p2_atm, fg, fo, fw, gamma_g, t_C, d2_mm, gamma_oil,
+                                        pb_Mpa, co_1Mpa, rs_m3m3, bo_m3m3) - w_kghr
 
     return opt.fsolve(w2, p2_atm)
 
@@ -1232,12 +1234,12 @@ def p_choke_down_gasoilwater_atm(w_kghr, p1_atm, fg, fo, fw, gamma_g=0.55, gamma
     """
 
     def w2(p2_atm):
-        return W_choke_gasoilwater_kghr(p1_atm, p2_atm, fg, fo, fw, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8,
-                                        pb_Mpa=20, co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1) - w_kghr
+        return W_choke_gasoilwater_kghr(p1_atm, p2_atm, fg, fo, fw, gamma_g, t_C, d2_mm, gamma_oil,
+                                        pb_Mpa, co_1Mpa, rs_m3m3, bo_m3m3) - w_kghr
 
     p2 = opt.fsolve(w2, p1_atm - 0.00001)
-    if w_kghr > W_choke_crit_gasoilwater_kghr(p1_atm, fg, fo, fw, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8,
-                                              pb_Mpa=20, co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1):
+    if w_kghr > W_choke_crit_gasoilwater_kghr(p1_atm, fg, fo, fw, gamma_g, t_C, d2_mm, gamma_oil,
+                                              pb_Mpa, co_1Mpa, rs_m3m3, bo_m3m3):
         print('Ошибка! Слишком большой расход для такого входного давления!')
         p2 = 0
     return p2
@@ -1263,12 +1265,12 @@ def f_choke_difpressure_gasoilwater_atm(w_kghr, p1_atm, fg, fo, fw, gamma_g=0.55
     """
 
     def w2(f):
-        return W_choke_gasoilwater_kghr(p1_atm, p1_atm - f, fg, fo, fw, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8,
-                                        pb_Mpa=20, co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1) - w_kghr
+        return W_choke_gasoilwater_kghr(p1_atm, p1_atm - f, fg, fo, fw, gamma_g, t_C, d2_mm, gamma_oil,
+                                        pb_Mpa, co_1Mpa, rs_m3m3, bo_m3m3) - w_kghr
 
     f = opt.fsolve(w2, 0)
-    if w_kghr > W_choke_crit_gasoilwater_kghr(p1_atm, fg, fo, fw, gamma_g=0.55, t_C=20, d2_mm=5, gamma_oil=0.8,
-                                              pb_Mpa=20, co_1Mpa=0.002, rs_m3m3=300, bo_m3m3=1):
+    if w_kghr > W_choke_crit_gasoilwater_kghr(p1_atm, fg, fo, fw, gamma_g, t_C, d2_mm, gamma_oil,
+                                              pb_Mpa, co_1Mpa, rs_m3m3, bo_m3m3):
         print('Ошибка! Слишком большой расход для такого входного давления!')
         f = 0
     return f
@@ -1310,7 +1312,7 @@ def p_choke_up_saturatedsteam_atm(w_kghr, p2_atm, x, d0_mm=5, d1_mm=100):
     """
 
     def w2(p1_atm):
-        return w_choke_saturatedsteam_kghr(p1_atm, p2_atm, x, d0_mm=5, d1_mm=100) - w_kghr
+        return w_choke_saturatedsteam_kghr(p1_atm, p2_atm, x, d0_mm, d1_mm) - w_kghr
 
     return opt.fsolve(w2, p2_atm)
 
@@ -1350,7 +1352,7 @@ def f_choke_difpressure_saturatedsteam_atm(w_kghr, p1_atm, x, d0_mm=5, d1_mm=100
     """
 
     def w2(f):
-        return w_choke_saturatedsteam_kghr(p1_atm, p1_atm - f, x, d0_mm=5, d1_mm=100) - w_kghr
+        return w_choke_saturatedsteam_kghr(p1_atm, p1_atm - f, x, d0_mm, d1_mm) - w_kghr
 
     return opt.fsolve(w2, 0)
 
@@ -1443,7 +1445,7 @@ def p_choke_up_saturatsteam_atm(w_kghr, p2_atm, xg, dchoke_mm=5):
     """
 
     def w2(p1_atm):
-        return q_choke_saturatsteam_kghr(p1_atm, p2_atm, xg, dchoke_mm=5) - w_kghr
+        return q_choke_saturatsteam_kghr(p1_atm, p2_atm, xg, dchoke_mm) - w_kghr
 
     return opt.fsolve(w2, p2_atm)
 
@@ -1458,7 +1460,7 @@ def p_choke_down_saturatsteam_atm(w_kghr, p1_atm, xg, dchoke_mm=5):
     """
 
     def w2(p2_atm):
-        return q_choke_saturatsteam_kghr(p1_atm, p2_atm, xg, dchoke_mm=5) - w_kghr
+        return q_choke_saturatsteam_kghr(p1_atm, p2_atm, xg, dchoke_mm) - w_kghr
 
     p2 = opt.fsolve(w2, p1_atm - 0.00001)
     if w_kghr > q_choke_critsaturatsteam_kghr(p1_atm, xg):
@@ -1477,7 +1479,7 @@ def f_choke_difpressure_saturatsteam_atm(w_kghr, p1_atm, xg, dchoke_mm=5):
     """
 
     def w2(f):
-        return q_choke_saturatsteam_kghr(p1_atm, p1_atm - f, xg, dchoke_mm=5) - w_kghr
+        return q_choke_saturatsteam_kghr(p1_atm, p1_atm - f, xg, dchoke_mm) - w_kghr
 
     f = opt.fsolve(w2, 0)
     if w_kghr > q_choke_critsaturatsteam_kghr(p1_atm, xg):
@@ -1486,7 +1488,7 @@ def f_choke_difpressure_saturatsteam_atm(w_kghr, p1_atm, xg, dchoke_mm=5):
     return f
 
 
-def W_choke_ssteam_kghr(p1_atm, p2_atm, fg, t_C=20, d2_mm=5):
+def W_choke_ssteam_kghr(p1_atm, p2_atm, fg, d2_mm=5):
     """
     расчет расхода насыщенного пара через штуцер по методике Перкинса
     p1_atm - давление на входе в штуцер, атм
@@ -1519,8 +1521,8 @@ def W_choke_ssteam_kghr(p1_atm, p2_atm, fg, t_C=20, d2_mm=5):
     alf = (1 / v1_ft3lbm) * fw / row
     a1_ft2 = 3.14 * d1_ft ** 2 / 4
     a2_ft2 = 3.14 * d2_ft ** 2 / 4
-    n = (fg * f * cvg+ fw * cvw) / (fg * cvg+ fw * cvw)
-    lambd = fg + ((fg * cvg+ fw * cvw) * m_m / (z * r_ftIbtlbmmolr))
+    n = (fg * f * cvg + fw * cvw) / (fg * cvg+ fw * cvw)
+    lambd = fg + ((fg * cvg + fw * cvw) * m_m / (z * r_ftIbtlbmmolr))
     i = 0
     pr1 = 0.1
     pr11 = 0.2
@@ -1568,7 +1570,7 @@ def W_choke_ssteam_kghr(p1_atm, p2_atm, fg, t_C=20, d2_mm=5):
     return wi_kghr
 
 
-def W_choke_critssteam_kghr(p1_atm, fg, t_C=20, d2_mm=5):
+def W_choke_critssteam_kghr(p1_atm, fg, d2_mm=5):
     """
     расчет критического расхода насыщенного пара через штуцер по методике Перкинса
     p1_atm - давление на входе в штуцер, атм
@@ -1632,7 +1634,7 @@ def W_choke_critssteam_kghr(p1_atm, fg, t_C=20, d2_mm=5):
         cpg = 0.24 * 778.169 * steamTable.CpV_p(pmid_atm) # удельная теплоемкость пара при постоянном давлении, кДж/кг/К
         f = cpg / cvg
         n = (fg * f * cvg + fw * cvw) / (fg * cvg+ fw * cvw)
-        lambd = fg + ((fg * cvg+ fw * cvw) * m_m / (z * r_ftIbtlbmmolr))
+        lambd = fg + ((fg * cvg + fw * cvw) * m_m / (z * r_ftIbtlbmmolr))
         pr11 = opt.fsolve(qw, 0.01)
         i = i + 1
     pr = p3_psia / p1_psia
@@ -1640,7 +1642,7 @@ def W_choke_critssteam_kghr(p1_atm, fg, t_C=20, d2_mm=5):
     ab = (lambd * (1 - pr ** ((n - 1) / n)) + alf * (1 - pr)) / (
                 (1 - ((a2_ft2 / a1_ft2) ** 2) * ((fg + alf) / ((fg * pr ** (-1 / n)) + alf)) ** 2) * (
                     (fg * pr ** (-1 / n)) + alf) ** 2)
-    wi_lbmsec = a2_ft2 * ((288 * g_c * p1_psia/ v1_ft3lbm) * ab) ** 0.5
+    wi_lbmsec = a2_ft2 * ((288 * g_c * p1_psia / v1_ft3lbm) * ab) ** 0.5
     wi_kghr = wi_lbmsec * 0.45359 * 3600  # перевод в кг/час
     return wi_kghr
 
@@ -1655,7 +1657,7 @@ def p_choke_up_ssteam_atm(w_kghr, p2_atm, fg, d2_mm=5):
     """
 
     def w2(p1_atm):
-        return W_choke_ssteam_kghr(p1_atm, p2_atm, fg, d2_mm=5) - w_kghr
+        return W_choke_ssteam_kghr(p1_atm, p2_atm, fg, d2_mm) - w_kghr
 
     return opt.fsolve(w2, p2_atm)
 
@@ -1670,7 +1672,7 @@ def p_choke_down_ssteam_atm(w_kghr, p1_atm, fg, d2_mm=5):
     """
 
     def w2(p2_atm):
-        return W_choke_ssteam_kghr(p1_atm, p2_atm, fg, d2_mm=5) - w_kghr
+        return W_choke_ssteam_kghr(p1_atm, p2_atm, fg, d2_mm) - w_kghr
 
     p2 = opt.fsolve(w2, p1_atm - 0.00001)
     if w_kghr > W_choke_critssteam_kghr(p1_atm, fg):

@@ -132,9 +132,6 @@ def unf_rs_Standing_m3m3(p_MPaa, pb_MPaa=0, rsb_m3m3=0, gamma_oil=0.86, gamma_ga
         rs_m3m3 = rsb_m3m3
     return rs_m3m3
 
-Cvo_kJkgK=1.52 #удельная  теплоемкость для нефти, кДж/кгК
-Cvg_kJkgK=1.53 #удельная изохорная теплоемкость для газа, кДж/кгК
-Cpg_kJkgK=1.99 #удельная изобарная теплоемкость для газа, кДж/кгК
 
 
 def unf_rs_Velarde_m3m3(p_MPaa, pb_MPaa=10, rsb_m3m3=100, gamma_oil=0.86, gamma_gas=0.6, t_K=350):

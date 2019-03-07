@@ -6,8 +6,7 @@ import matplotlib.pyplot as plt
 import Correlations.choke as choke
 
 
-def plot_w_choke_gasoil():
-    p1_atm = 20
+def plot_w_choke_gasoil(p1_atm):
     p2_a = np.arange(0.1, p1_atm, 0.05)
     q1 = np.array([])
     q2 = np.array([])
@@ -27,12 +26,11 @@ def plot_w_choke_gasoil():
     plt.xlabel('Давление на выходе, атм')
     plt.legend()
     return plt
-plot_w_choke_gasoil().show()
+
 
 'Построение графика "Давление на входе в зависимости от расхода и давления на выходе"'
-def plot_p_choke_up_gasoil():
-    p2_atm = 10
-    w_kghr_a = np.arange(0, 200, 2) # расход, кг/час для которого находится давление на выходе
+def plot_p_choke_up_gasoil(p2_atm, w_kghr_0, w_kghr_max):
+    w_kghr_a = np.arange(w_kghr_0, w_kghr_max, 2)  # расход, кг/час для которого находится давление на выходе
     q1 = np.array([])
     q2 = np.array([])
     q3 = np.array([])
@@ -51,13 +49,12 @@ def plot_p_choke_up_gasoil():
     plt.ylabel('Давление на входе, атм')
     plt.legend()
     return plt
-plot_p_choke_up_gasoil().show()
+
 
 
 'Построение графика "Давление на выходе в зависимости от расхода и давления на входе"'
-def plot_p_choke_down_gasoil():
-    p1_atm = 20
-    w_kghr_a = np.arange(0, 200, 2) # расход, кг/час для которого находится давление на выходе
+def plot_p_choke_down_gasoil(p1_atm, w_kghr_0, w_kghr_max):
+    w_kghr_a = np.arange(w_kghr_0, w_kghr_max, 2)  # расход, кг/час для которого находится давление на выходе
     q1 = np.array([])
     q2 = np.array([])
     q3 = np.array([])
@@ -76,4 +73,3 @@ def plot_p_choke_down_gasoil():
     plt.ylabel('Давление на выходе, атм')
     plt.legend()
     return plt
-plot_p_choke_down_gasoil().show()
